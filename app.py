@@ -1,9 +1,3 @@
-"""
-app.py
-Career Progression & Promotion Gap Analysis Dashboard
-Palo Alto Networks | Unified Mentor Project
-"""
-
 import streamlit as st
 import pandas as pd
 
@@ -27,7 +21,6 @@ from charts import (
     fig_metric_histogram, fig_correlation_matrix,
 )
 
-# ─── Page Config ─────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Career Intelligence | Palo Alto Networks",
     page_icon="🚀",
@@ -35,7 +28,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── CSS ─────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
     .main, .stApp { background-color: #0f1117; }
@@ -61,7 +53,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ─── Load Data ───────────────────────────────────────────────────────────────
 DATA_PATH = "Palo_Alto_Networks.csv"
 
 @st.cache_data
@@ -74,7 +65,6 @@ except FileNotFoundError:
     st.error("⚠️  `Palo_Alto_Networks.csv` not found. Place it in the same directory as `app.py`.")
     st.stop()
 
-# ─── Sidebar Filters ─────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🔭 Filters")
     st.markdown("---")
@@ -97,7 +87,6 @@ with st.sidebar:
     st.markdown("---")
     st.caption("Career Intelligence Dashboard v1.0\nPalo Alto Networks × Unified Mentor")
 
-# ─── Apply Filters ───────────────────────────────────────────────────────────
 df = df_full.copy()
 if sel_dept != "All":      df = df[df["Department"] == sel_dept]
 if sel_role != "All":      df = df[df["JobRole"] == sel_role]
@@ -108,7 +97,6 @@ if cluster_filter: df = df[df["ClusterLabel"].isin(cluster_filter)]
 df = df[df["YearsSinceLastPromotion"] <= promo_gap_threshold]
 df = df[df["PromotionGapScore"].isin(gap_filter)]
 
-# ─── Header ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <div style="background:linear-gradient(135deg,#1a1e35,#1e2440);
      border:1px solid #2d3555;border-radius:16px;padding:28px 32px;margin-bottom:24px;">
@@ -126,7 +114,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ─── KPI Row ─────────────────────────────────────────────────────────────────
 def kpi(col, value, label, sub=""):
     col.markdown(f"""
     <div class="metric-card">
@@ -145,7 +132,6 @@ kpi(c6, f"{(df['TrainingNeedIndicator']=='Critical').sum():,}", "Critical Traini
 
 st.markdown("---")
 
-# ─── Tabs ─────────────────────────────────────────────────────────────────────
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🗂 Career Clustering",
     "📈 Promotion Gap Monitor",
@@ -154,7 +140,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📋 Employee Explorer",
 ])
 
-# ── Tab 1 ────────────────────────────────────────────────────────────────────
 with tab1:
     st.markdown('<div class="section-header">Career Path Clustering</div>', unsafe_allow_html=True)
     col_l, col_r = st.columns([3, 2])
@@ -168,7 +153,6 @@ with tab1:
     with col_a: st.plotly_chart(fig_attrition_by_cluster(df), width="stretch")
     with col_b: st.plotly_chart(fig_cluster_by_dept(df),      width="stretch")
 
-# ── Tab 2 ────────────────────────────────────────────────────────────────────
 with tab2:
     st.markdown('<div class="section-header">Promotion Gap Monitor</div>', unsafe_allow_html=True)
     col_l, col_r = st.columns([2, 1])
@@ -193,7 +177,6 @@ with tab2:
         width="stretch", height=320,
     )
 
-# ── Tab 3 ────────────────────────────────────────────────────────────────────
 with tab3:
     st.markdown('<div class="section-header">Retention Opportunity Panel</div>', unsafe_allow_html=True)
     col_l, col_r = st.columns([1, 2])
@@ -214,7 +197,6 @@ with tab3:
             col2.markdown(f"*{count} employees*")
             col3.markdown(action)
 
-# ── Tab 4 ────────────────────────────────────────────────────────────────────
 with tab4:
     st.markdown('<div class="section-header">Manager Stability & Team Career Health</div>', unsafe_allow_html=True)
     col_l, col_r = st.columns(2)
@@ -230,7 +212,6 @@ with tab4:
     with col_c: st.plotly_chart(fig_wlb_vs_gap(df),            width="stretch")
     with col_d: st.plotly_chart(fig_jobsat_vs_attrition(df),   width="stretch")
 
-# ── Tab 5 ────────────────────────────────────────────────────────────────────
 with tab5:
     st.markdown('<div class="section-header">Employee-Level Career Explorer</div>', unsafe_allow_html=True)
 
@@ -260,7 +241,6 @@ with tab5:
     st.markdown('<div class="section-header">Career Feature Correlation Matrix</div>', unsafe_allow_html=True)
     st.plotly_chart(fig_correlation_matrix(df), width="stretch")
 
-# ─── Footer ──────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown(
     "<p style='text-align:center;color:#3d4466;font-size:0.78rem;'>"
