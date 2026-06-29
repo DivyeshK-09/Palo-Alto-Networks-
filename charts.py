@@ -1,15 +1,8 @@
-"""
-charts.py
-Career Progression & Promotion Gap Analysis — Palo Alto Networks
-All Plotly figure builders. Each function takes a DataFrame and returns a go.Figure.
-"""
-
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# ─── Color Palettes ───────────────────────────────────────────────────────────
 
 CLUSTER_COLORS = {
     "Promotion-Stalled":       "#ff4d6d",
@@ -33,11 +26,6 @@ BASE = dict(
 )
 
 GRID = dict(gridcolor="#1e2240")
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# TAB 1 — Career Clustering
-# ═══════════════════════════════════════════════════════════════════════════════
 
 def fig_pca_scatter(df: pd.DataFrame) -> go.Figure:
     fig = px.scatter(
@@ -115,11 +103,6 @@ def fig_cluster_by_dept(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(**BASE, height=340, yaxis=GRID)
     return fig
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# TAB 2 — Promotion Gap Monitor
-# ═══════════════════════════════════════════════════════════════════════════════
-
 def fig_gap_by_role(df: pd.DataFrame) -> go.Figure:
     data = df.groupby(["JobRole", "PromotionGapScore"]).size().reset_index(name="Count")
     fig = px.bar(data, x="JobRole", y="Count",
@@ -177,11 +160,6 @@ def fig_salary_vs_gap(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(**BASE, height=380, xaxis=GRID, yaxis=GRID)
     return fig
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# TAB 3 — Retention Opportunities
-# ═══════════════════════════════════════════════════════════════════════════════
-
 def fig_retention_donut(df: pd.DataFrame) -> go.Figure:
     counts = df["RetentionOpportunityIndex"].value_counts().reset_index()
     counts.columns = ["Priority", "Count"]
@@ -228,10 +206,6 @@ def fig_training_vs_attrition(df: pd.DataFrame) -> go.Figure:
     fig.update_layout(**BASE, height=340, showlegend=False, yaxis=GRID)
     return fig
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# TAB 4 — Managerial Insights
-# ═══════════════════════════════════════════════════════════════════════════════
 
 def fig_manager_tenure_vs_attrition(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
@@ -330,11 +304,6 @@ def fig_jobsat_vs_attrition(df: pd.DataFrame) -> go.Figure:
     fig.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
     fig.update_layout(**BASE, height=320, showlegend=False, yaxis=GRID)
     return fig
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# TAB 5 — Employee Explorer
-# ═══════════════════════════════════════════════════════════════════════════════
 
 def fig_metric_histogram(df: pd.DataFrame, metric: str) -> go.Figure:
     fig = px.histogram(df, x=metric, color="ClusterLabel",
