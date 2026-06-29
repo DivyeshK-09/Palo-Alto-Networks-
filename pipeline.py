@@ -1,9 +1,3 @@
-"""
-pipeline.py
-Career Progression & Promotion Gap Analysis — Palo Alto Networks
-Handles: feature engineering, clustering, KPI scoring, PCA projection
-"""
-
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
@@ -11,8 +5,6 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import warnings
 warnings.filterwarnings("ignore")
-
-# ─── Constants ────────────────────────────────────────────────────────────────
 
 CLUSTER_FEATURES = [
     "PromotionGapRatio", "RoleStagnationIndex", "TrainingIntensityScore",
@@ -39,9 +31,6 @@ CLUSTER_ACTIONS = {
 N_CLUSTERS = 5
 RANDOM_STATE = 42
 
-
-# ─── Feature Engineering ──────────────────────────────────────────────────────
-
 def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df["PromotionGapRatio"]         = df["YearsSinceLastPromotion"] / (df["YearsAtCompany"] + 1)
@@ -51,9 +40,6 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     df["CareerVelocity"]            = df["JobLevel"]                / (df["TotalWorkingYears"] + 1)
     df["SalaryGrowthPerYear"]       = df["PercentSalaryHike"]       / (df["YearsAtCompany"] + 1)
     return df
-
-
-# ─── Clustering ───────────────────────────────────────────────────────────────
 
 def run_clustering(df: pd.DataFrame):
     """Fit scaler + KMeans, return (df_with_clusters, scaler, model, pca)."""
@@ -74,8 +60,6 @@ def run_clustering(df: pd.DataFrame):
 
     return df, scaler, km, pca
 
-
-# ─── KPI Scoring ─────────────────────────────────────────────────────────────
 
 def score_promotion_gap(row) -> str:
     score = 0
@@ -111,8 +95,6 @@ def apply_kpi_scores(df: pd.DataFrame) -> pd.DataFrame:
     df["TrainingNeedIndicator"]    = df.apply(score_training_need,          axis=1)
     return df
 
-
-# ─── Master Runner ────────────────────────────────────────────────────────────
 
 def build_pipeline(path: str) -> pd.DataFrame:
     """Load CSV → engineer features → cluster → KPI scores. Returns enriched DataFrame."""
