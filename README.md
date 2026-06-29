@@ -1,35 +1,7 @@
 # Career Progression & Promotion Gap Analysis Dashboard
 **Palo Alto Networks × Unified Mentor**
 
-## Setup & Run
-
-### 1. Create and activate the virtual environment
-```bash
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# macOS / Linux
-source venv/bin/activate
-```
-
-### 2. Install dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Run the dashboard
-```bash
-streamlit run app.py
-```
-
-Or just use the convenience script (macOS/Linux):
-```bash
-./activate_and_run.sh
-```
-
----
+Deployed Streamlit Link: https://notgkyievs35dayji6tihj.streamlit.app/
 
 ## Project Structure
 
